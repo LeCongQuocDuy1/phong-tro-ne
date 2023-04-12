@@ -3,12 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { InputForm, Button } from "../../components";
 import * as actions from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    const { isLoggedIn, msg, update } = useSelector((state) => state.auth);
     const [invalidFields, setInvalidFields] = useState([]);
     const [isRegister, setIsRegister] = useState(location.state?.flag);
     const [payload, setPayload] = useState({
@@ -86,7 +87,11 @@ const Login = () => {
 
     useEffect(() => {
         isLoggedIn && navigate("/");
-    }, [isLoggedIn]);
+    }, [isLoggedIn, navigate]);
+
+    useEffect(() => {
+        msg && Swal.fire("Opps!", msg, "error");
+    }, [msg, update]);
 
     return (
         <div className="flex items-center justify-center h-full py-[100px]">

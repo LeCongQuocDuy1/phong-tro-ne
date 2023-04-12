@@ -18,7 +18,7 @@ const commonConfig = {
 const authConfig = {
     ...commonConfig,
     key: "auth",
-    whitelist: ["isLoggedIn", "token"],
+    whitelist: ["isLoggedIn", "token", "msg", "update"],
 };
 
 // whitelist de chon ra nhung state nao cua reducer duoc luu o localstorage
