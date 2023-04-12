@@ -8,12 +8,15 @@ const Button = ({
     width = "",
     height = "h-[40px]",
     marginBottom = "",
+    marginRight = "",
     content,
     icon,
+    onClick,
 }) => {
     return (
         <button
-            className={`hover:underline ${height} ${width} ${fontSize} ${fontBold} ${textColor} ${backgroundColor} ${marginBottom} rounded-md`}
+            className={`hover:underline ${height} ${width} ${fontSize} ${fontBold} ${textColor} ${backgroundColor} ${marginBottom} ${marginRight} rounded-md`}
+            onClick={onClick}
         >
             {content || null}
             {icon || null}
