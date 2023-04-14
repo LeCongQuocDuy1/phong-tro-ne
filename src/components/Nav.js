@@ -24,7 +24,7 @@ const Nav = () => {
     };
 
     return (
-        <div className="h-[40px] w-full bg-primary sticky top-0">
+        <div className="h-[40px] w-full bg-primary sticky top-0 z-10">
             <ul className="flex items-center w-1100 mx-auto">
                 <li className="">
                     <NavLink

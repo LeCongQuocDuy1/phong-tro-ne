@@ -1,14 +1,17 @@
-import { React, useCallback } from "react";
+import { React, useCallback, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../ultils/fontawesome";
 import logo from "../assets/logo-removebg-preview.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import * as actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { paths } from "../ultils/constants";
 import Button from "./Button";
 
 const Header = () => {
+    const listRef = useRef();
+    const [params] = useSearchParams();
+    const page = +params.get("page");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isLoggedIn } = useSelector((state) => state.auth);
@@ -20,12 +23,22 @@ const Header = () => {
         [navigate]
     );
 
+    useEffect(() => {
+        listRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }, [dispatch, page]);
+
     const handleGotoHome = useCallback(() => {
         navigate(paths.HOME);
     }, [navigate]);
 
     return (
-        <div className="h-[70px] w-1100 flex items-center justify-between mx-auto">
+        <div
+            ref={listRef}
+            className="h-[70px] w-1100 flex items-center justify-between mx-auto"
+        >
             <button onClick={handleGotoHome} className="">
                 <img
                     src={logo}

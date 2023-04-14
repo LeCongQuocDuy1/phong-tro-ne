@@ -8,6 +8,10 @@ function App() {
             <Routes>
                 <Route path={paths.LAYOUT} element={<pages.Layout />}>
                     <Route path={paths.HOME} element={<pages.Home />} />
+                    <Route
+                        path={paths.DETAIL_POST__TITLE__POSTID}
+                        element={<pages.ChiTietBaiDang />}
+                    />
                     <Route path={paths.LOGIN} element={<pages.Login />} />
                     <Route
                         path={paths.CHO_THUE_PHONG_TRO}
@@ -31,6 +35,10 @@ function App() {
                     />
 
                     <Route path={paths.STAR} element={<pages.Home />} />
+                    <Route
+                        path={paths.DETAIL_POST}
+                        element={<pages.ChiTietBaiDang />}
+                    />
                 </Route>
             </Routes>
         </div>

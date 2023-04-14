@@ -8,8 +8,17 @@ import {
     faEnvelope,
     faHouseUser,
     faSignOut,
+    faChevronRight,
+    faHotel,
+    faMapMarkedAlt,
+    faTag,
+    faVectorSquare,
+    faSearch,
+    faHeart,
+    faAngleDoubleRight,
+    faAngleDoubleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+// import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
 export const icons = {
     faHeart,
@@ -22,4 +31,12 @@ export const icons = {
     faEnvelope,
     faHouseUser,
     faSignOut,
+    faChevronRight,
+    faHotel,
+    faMapMarkedAlt,
+    faTag,
+    faVectorSquare,
+    faSearch,
+    faAngleDoubleRight,
+    faAngleDoubleLeft,
 };
