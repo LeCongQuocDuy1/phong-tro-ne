@@ -1,6 +1,7 @@
 import userReducer from "./userReducer";
 import authReducer from "./authReducer";
 import postReducer from "./postReducer";
+import appReducer from "./appReducer";
 import { combineReducers } from "redux"; // gop cac reducer lai
 
 // dung redux persist de luu giu lai cac state va du lieu duoi
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
     auth: persistReducer(authConfig, authReducer),
     user: userReducer,
     post: postReducer,
+    app: appReducer,
 });
 
 export default rootReducer;

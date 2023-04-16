@@ -1,18 +1,16 @@
-import { React, useState, useEffect } from "react";
+import { React, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { apiGetAllCategories } from "../services/category";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../store/actions/";
 
 const Nav = () => {
-    const [categories, setCategories] = useState([]);
+    const { categories } = useSelector((state) => state.app);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const fetchAllCategories = async () => {
-            const response = await apiGetAllCategories();
-            const allCategories = response?.data?.response;
-            setCategories(allCategories);
-        };
-        fetchAllCategories();
-    }, []);
+        dispatch(actions.getCategories());
+    }, [dispatch]);
 
     const formatVietnameseToEnglishString = (keyword) => {
         return keyword

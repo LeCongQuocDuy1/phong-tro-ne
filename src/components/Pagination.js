@@ -18,10 +18,17 @@ const Pagination = () => {
     const { count, posts } = useSelector((state) => state.post);
     const navigate = useNavigate();
     const [params] = useSearchParams();
-    const [currentPage, setCurrentPage] = useState(+params.get("page") || 1);
+    let entries = params.entries();
+    const [currentPage, setCurrentPage] = useState(1);
     const [arrPage, setArrPage] = useState([]);
 
-    let maxPage = Math.floor(count / posts.length);
+    useEffect(() => {
+        let page = params.get("page");
+        page && +page !== currentPage && setCurrentPage(+page);
+        !page && setCurrentPage(1);
+    }, [currentPage, params]);
+
+    let maxPage = Math.ceil(count / process.env.REACT_APP_LIMIT);
     useEffect(() => {
         let end = currentPage + 1 > maxPage ? maxPage : currentPage + 1;
         let start = currentPage - 1 <= 0 ? 1 : currentPage - 1;
@@ -33,12 +40,20 @@ const Pagination = () => {
     }, [count, posts, currentPage, maxPage]);
 
     const handleClickChangePage = (item) => {
+        const append = (entries) => {
+            let paramSearchs = [];
+            params.append("page", item);
+            for (let entry of entries) {
+                paramSearchs.push(entry);
+            }
+            let a = {};
+            paramSearchs?.map((i) => (a = { ...a, [i[0]]: i[1] }));
+            return a;
+        };
         setCurrentPage(item);
         navigate({
             pathname: "",
-            search: createSearchParams({
-                page: item,
-            }).toString(),
+            search: createSearchParams(append(entries)).toString(),
         });
     };
 

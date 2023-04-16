@@ -16,7 +16,7 @@ const ChoThuePhongTro = () => {
                 </p>
             </header>
             <Province />
-            <div className="flex items-start w-1100 gap-[10px]">
+            <div className="flex items-start w-1100 gap-[15px]">
                 <Left />
                 <Right />
             </div>

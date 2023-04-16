@@ -6,16 +6,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
 const Left = () => {
-    const [params] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
-    const page = +params.get("page");
 
     const { posts } = useSelector((state) => state.post);
 
     useEffect(() => {
-        const offset = page ? page - 1 : 0;
-        dispatch(getPostsLimit(offset));
-    }, [dispatch, page]);
+        let params = [];
+        for (let entry of searchParams.entries()) {
+            params.push(entry);
+        }
+        let searchParamObject = {};
+        params?.map(
+            (i) => (searchParamObject = { ...searchParamObject, [i[0]]: i[1] })
+        );
+        console.log(searchParamObject);
+        dispatch(getPostsLimit(searchParamObject));
+    }, [dispatch, searchParams]);
     return (
         <div className="w-[70%]">
             <div className="w-full bg-white rounded-[8px] pt-[15px] pb-[20px] border border-[#ccc]">

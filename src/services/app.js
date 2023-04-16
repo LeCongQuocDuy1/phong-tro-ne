@@ -1,11 +1,11 @@
 import axiosConfig from "../axiosConfig";
 
-export const apiGetAllPosts = () =>
+export const apiGetPrices = () =>
     new Promise(async (resolve, reject) => {
         try {
             const response = await axiosConfig({
                 method: "GET",
-                url: "/api/v1/post/all",
+                url: "/api/v1/price/all",
             });
 
             resolve(response);
@@ -14,13 +14,12 @@ export const apiGetAllPosts = () =>
         }
     });
 
-export const apiGetAllPostsLimit = (query) =>
+export const apiGetAreas = () =>
     new Promise(async (resolve, reject) => {
         try {
             const response = await axiosConfig({
                 method: "GET",
-                url: `/api/v1/post/limit/`,
-                params: query,
+                url: "/api/v1/area/all",
             });
 
             resolve(response);
