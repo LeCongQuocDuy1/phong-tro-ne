@@ -18,6 +18,7 @@ module.exports = {
                 second: "#f73859",
                 bg: "#f5f5f5",
                 inputBg: "#e8f0fe",
+                overlay: "rgba(0, 0, 0, 0.3)",
             },
         },
     },

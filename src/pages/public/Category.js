@@ -4,14 +4,15 @@ import { getPostsLimit } from "../../store/actions/post";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import * as actions from "../../store/actions/";
+import * as actions from "../../store/actions";
 
-const Home = () => {
+const Category = () => {
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
     const location = useLocation();
 
     const [categoryCode, setCategoryCode] = useState("");
+    const [categoryCurrent, setCategoryCurrent] = useState({});
     const { posts } = useSelector((state) => state.post);
     const { prices, areas, categories } = useSelector((state) => state.app);
 
@@ -33,8 +34,9 @@ const Home = () => {
         params?.map(
             (i) => (searchParamObject = { ...searchParamObject, [i[0]]: i[1] })
         );
+        if (categoryCode) searchParamObject.categoryCode = categoryCode;
         dispatch(getPostsLimit(searchParamObject));
-    }, [dispatch, searchParams]);
+    }, [categoryCode, dispatch, searchParams]);
 
     useEffect(() => {
         const category = categories?.find(
@@ -42,6 +44,7 @@ const Home = () => {
                 `/${formatVietnameseToEnglishString(item.value)}` ===
                 location.pathname
         );
+        setCategoryCurrent(category);
         if (category) {
             setCategoryCode(category.code);
         }
@@ -57,13 +60,10 @@ const Home = () => {
         <div className="mx-auto w-1100 mt-[10px] mb-[80px]">
             <header className="mb-[10px] w-full">
                 <p className="text-[25px] text-primary font-bold mb-[5px]">
-                    Kênh thông tin Phòng Trọ số 1 Việt Nam
+                    {categoryCurrent?.header}
                 </p>
                 <p className="text-[14px] text-primary">
-                    Kênh thông tin Phòng Trọ số 1 Việt Nam - Website đăng tin
-                    cho thuê phòng trọ, nhà nguyên căn, căn hộ, ở ghép nhanh,
-                    hiệu quả với 100.000+ tin đăng và 2.500.000 lượt xem mỗi
-                    tháng.
+                    {categoryCurrent?.subheader}
                 </p>
             </header>
             <Province />
@@ -75,4 +75,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Category;

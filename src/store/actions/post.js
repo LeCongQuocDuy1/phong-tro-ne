@@ -1,5 +1,9 @@
 import actionTypes from "./actionTypes";
-import { apiGetAllPosts, apiGetAllPostsLimit } from "../../services/post";
+import {
+    apiGetAllPosts,
+    apiGetAllPostsLimit,
+    apiGetAllPostsLimitDate,
+} from "../../services/post";
 
 export const getPosts = () => async (dispatch) => {
     try {
@@ -42,6 +46,29 @@ export const getPostsLimit = (query) => async (dispatch) => {
         dispatch({
             type: actionTypes.GET_POSTS_LIMIT,
             posts: null,
+        });
+    }
+};
+
+export const getPostsLimitDate = () => async (dispatch) => {
+    try {
+        const response = await apiGetAllPostsLimitDate();
+        if (response?.data.err === 0) {
+            dispatch({
+                type: actionTypes.GET_POSTS_LIMIT_DATE,
+                newPosts: response.data.response,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.GET_POSTS_LIMIT_DATE,
+                msg: response?.data.msg,
+                newPosts: null,
+            });
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_POSTS_LIMIT_DATE,
+            newPosts: null,
         });
     }
 };

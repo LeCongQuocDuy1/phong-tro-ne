@@ -1,28 +1,7 @@
-import { React, useEffect } from "react";
+import { React } from "react";
 import PostItem from "./PostItem";
 import Pagination from "./Pagination";
-import { getPostsLimit } from "../store/actions/post";
-import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
-
-const Left = () => {
-    const [searchParams] = useSearchParams();
-    const dispatch = useDispatch();
-
-    const { posts } = useSelector((state) => state.post);
-
-    useEffect(() => {
-        let params = [];
-        for (let entry of searchParams.entries()) {
-            params.push(entry);
-        }
-        let searchParamObject = {};
-        params?.map(
-            (i) => (searchParamObject = { ...searchParamObject, [i[0]]: i[1] })
-        );
-        console.log(searchParamObject);
-        dispatch(getPostsLimit(searchParamObject));
-    }, [dispatch, searchParams]);
+const Left = ({ posts }) => {
     return (
         <div className="w-[70%]">
             <div className="w-full bg-white rounded-[8px] pt-[15px] pb-[20px] border border-[#ccc]">

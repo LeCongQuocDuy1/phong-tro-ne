@@ -1,18 +1,9 @@
-import { React, useEffect } from "react";
+import { React } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../ultils/fontawesome";
-import { useDispatch, useSelector } from "react-redux";
-import * as actions from "../store/actions/";
 import { Link } from "react-router-dom";
 
-const RightItem = ({ title }) => {
-    const { categories } = useSelector((state) => state.app);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(actions.getCategories());
-    }, [dispatch]);
+const RightItem = ({ title, categories }) => {
 
     const formatVietnameseToEnglishString = (keyword) => {
         return keyword

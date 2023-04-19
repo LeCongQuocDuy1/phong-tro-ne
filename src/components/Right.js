@@ -1,22 +1,13 @@
-import { React, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import * as actions from "../store/actions/";
+import { React } from "react";
+
 import RightItem from "./RightItem";
 import RightItem2 from "./RightItem2";
+import NewPost from "./NewPost";
 
-const Right = () => {
-    const { prices, areas } = useSelector((state) => state.app);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(actions.getPrices());
-        dispatch(actions.getAreas());
-    }, [dispatch]);
-
+const Right = ({ prices, areas, categories }) => {
     return (
         <div className="w-[30%]">
-            <RightItem title="Danh mục cho thuê" />
+            <RightItem title="Danh mục cho thuê" categories={categories} />
             <RightItem2
                 title="Xem theo giá"
                 type={"priceCode"}
@@ -27,6 +18,7 @@ const Right = () => {
                 type={"areaCode"}
                 content={areas}
             />
+            <NewPost title="Tin mới đăng" />
         </div>
     );
 };

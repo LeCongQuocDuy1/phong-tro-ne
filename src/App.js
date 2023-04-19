@@ -7,37 +7,36 @@ function App() {
         <div className="">
             <Routes>
                 <Route path={paths.LAYOUT} element={<pages.Layout />}>
+                    <Route path={paths.LOGIN} element={<pages.Login />} />
+                    <Route path={paths.STAR} element={<pages.Home />} />
                     <Route path={paths.HOME} element={<pages.Home />} />
                     <Route
                         path={paths.DETAIL_POST__TITLE__POSTID}
-                        element={<pages.ChiTietBaiDang />}
+                        element={<pages.DetailPost />}
                     />
-                    <Route path={paths.LOGIN} element={<pages.Login />} />
+                    <Route
+                        path={paths.DETAIL_POST}
+                        element={<pages.DetailPost />}
+                    />
                     <Route
                         path={paths.CHO_THUE_PHONG_TRO}
-                        element={<pages.ChoThuePhongTro />}
+                        element={<pages.Category />}
                     />
                     <Route
                         path={paths.NHA_CHO_THUE}
-                        element={<pages.NhaChoThue />}
+                        element={<pages.Category />}
                     />
                     <Route
                         path={paths.CHO_THUE_CAN_HO}
-                        element={<pages.ChoThueCanHo />}
+                        element={<pages.Category />}
                     />
                     <Route
                         path={paths.CHO_THUE_MAT_BANG}
-                        element={<pages.ChoThueMatBang />}
+                        element={<pages.Category />}
                     />
                     <Route
                         path={paths.TIM_NGUOI_O_GHEP}
-                        element={<pages.TimNguoiOGhep />}
-                    />
-
-                    <Route path={paths.STAR} element={<pages.Home />} />
-                    <Route
-                        path={paths.DETAIL_POST}
-                        element={<pages.ChiTietBaiDang />}
+                        element={<pages.Category />}
                     />
                 </Route>
             </Routes>
