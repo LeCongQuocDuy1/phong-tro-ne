@@ -6,8 +6,9 @@ export const paths = {
     CHO_THUE_CAN_HO: "/cho-thue-can-ho",
     CHO_THUE_MAT_BANG: "/cho-thue-mat-bang",
     TIM_NGUOI_O_GHEP: "/tim-nguoi-o-ghep",
-    DETAIL_POST__TITLE__POSTID: "/chitiet/:title/:postId",
-    DETAIL_POST: "/chitiet/*",
+    DETAIL_POST__TITLE__POSTID: "/chi-tiet/:title/:postId",
+    DETAIL_POST: "/chi-tiet/*",
+    SEARCH_RESULT: "tim-kiem",
     LOGIN: "dang-nhap",
     STAR: "*",
 };

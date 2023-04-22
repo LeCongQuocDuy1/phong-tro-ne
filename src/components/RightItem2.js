@@ -1,7 +1,7 @@
 import { React } from "react";
+import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../ultils/fontawesome";
-import { createSearchParams, useNavigate, useLocation } from "react-router-dom";
 
 const RightItem2 = ({ title, content, type }) => {
     const navigate = useNavigate();

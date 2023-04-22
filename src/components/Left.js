@@ -1,7 +1,11 @@
 import { React } from "react";
 import PostItem from "./PostItem";
 import Pagination from "./Pagination";
-const Left = ({ posts }) => {
+import { useSelector } from "react-redux";
+
+const Left = () => {
+    const { posts } = useSelector((state) => state.post);
+
     return (
         <div className="w-[70%]">
             <div className="w-full bg-white rounded-[8px] pt-[15px] pb-[20px] border border-[#ccc]">

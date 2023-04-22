@@ -1,10 +1,9 @@
 import { React } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../ultils/fontawesome";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const RightItem = ({ title, categories }) => {
-
     const formatVietnameseToEnglishString = (keyword) => {
         return keyword
             .toLowerCase()
@@ -32,14 +31,14 @@ const RightItem = ({ title, categories }) => {
                                     icon={icons.faChevronRight}
                                     className="text-[10px] text-[#999] mr-2 pt-[2px]"
                                 />
-                                <Link
+                                <NavLink
                                     to={formatVietnameseToEnglishString(
                                         category.value
                                     )}
                                     className="text-primary text-[14px] hover:text-bg2 cursor-pointer"
                                 >
                                     {category.value}
-                                </Link>
+                                </NavLink>
                             </div>
                             <div className="text-[#999] text-[13px]">
                                 (49.124)
@@ -47,64 +46,6 @@ const RightItem = ({ title, categories }) => {
                         </div>
                     );
                 })}
-            {/* <div className="flex items-center justify-between w-full py-[5px] border-b-[1px] border-[#ccc] border-dashed">
-                <div className="flex items-center">
-                    <FontAwesomeIcon
-                        icon={icons.faChevronRight}
-                        className="text-[10px] text-[#999] mr-2 pt-[2px]"
-                    />
-                    <p className="text-primary text-[14px] hover:text-bg2 cursor-pointer">
-                        Cho thuê phòng trọ
-                    </p>
-                </div>
-                <div className="text-[#999] text-[13px]">(49.124)</div>
-            </div>
-            <div className="flex items-center justify-between w-full py-[5px] border-b-[1px] border-[#ccc] border-dashed">
-                <div className="flex items-center">
-                    <FontAwesomeIcon
-                        icon={icons.faChevronRight}
-                        className="text-[10px] text-[#999] mr-2 pt-[2px]"
-                    />
-                    <p className="text-primary text-[14px] hover:text-bg2 cursor-pointer">
-                        Cho thuê nhà nguyên căn
-                    </p>
-                </div>
-                <div className="text-[#999] text-[13px]">(49.124)</div>
-            </div>
-            <div className="flex items-center justify-between w-full py-[5px] border-b-[1px] border-[#ccc] border-dashed">
-                <div className="flex items-center">
-                    <FontAwesomeIcon
-                        icon={icons.faChevronRight}
-                        className="text-[10px] text-[#999] mr-2 pt-[2px]"
-                    />
-                    <p className="text-primary text-[14px] hover:text-bg2 cursor-pointer">
-                        Cho thuê căn hộ
-                    </p>
-                </div>
-                <div className="text-[#999] text-[13px]">(49.124)</div>
-            </div>
-            <div className="ml-[15px] flex items-center justify-between py-[5px] border-b-[1px] border-[#ccc] border-dashed">
-                <div className="flex items-center">
-                    <FontAwesomeIcon
-                        icon={icons.faChevronRight}
-                        className="text-[10px] text-[#999] mr-2 pt-[2px]"
-                    />
-                    <p className="text-primary text-[14px] hover:text-bg2 cursor-pointer">
-                        Cho thuê căn hộ mini
-                    </p>
-                </div>
-            </div>
-            <div className="ml-[15px] flex items-center justify-between py-[5px] border-b-[1px] border-[#ccc] border-dashed">
-                <div className="flex items-center">
-                    <FontAwesomeIcon
-                        icon={icons.faChevronRight}
-                        className="text-[10px] text-[#999] mr-2 pt-[2px]"
-                    />
-                    <p className="text-primary text-[14px] hover:text-bg2 cursor-pointer">
-                        Cho thuê căn hộ dịch vụ
-                    </p>
-                </div>
-            </div> */}
         </div>
     );
 };

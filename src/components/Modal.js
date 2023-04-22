@@ -2,12 +2,33 @@ import { React, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../ultils/fontawesome";
 
-const ModalList = ({ content, text, title, setIsShowModal }) => {
-    const [persent1, setPersent1] = useState(0);
-    const [persent2, setPersent2] = useState(100);
+const Modal = ({
+    content,
+    text,
+    title,
+    setIsShowModal,
+    handleSubmit,
+    arrMinMax,
+    queries,
+}) => {
+    const [persent1, setPersent1] = useState(
+        text === "price" && arrMinMax?.priceArr
+            ? arrMinMax?.priceArr[0]
+            : text === "area" && arrMinMax?.priceArr
+            ? arrMinMax?.areaArr[0]
+            : 0
+    );
+    const [persent2, setPersent2] = useState(
+        text === "price" && arrMinMax?.priceArr
+            ? arrMinMax?.priceArr[1]
+            : text === "area" && arrMinMax?.priceArr
+            ? arrMinMax?.areaArr[1]
+            : 100
+    );
+
     const [active, setActive] = useState("");
 
-    const handleClickTrack = (e, value) => {
+    const handleClickTrack = (e) => {
         e.stopPropagation();
         const track = document.getElementById("track");
         const trackRect = track.getBoundingClientRect();
@@ -24,14 +45,14 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
     const handleClickItem = (code, value) => {
         setActive(code);
         let arrMaxMin;
-        text === "prices"
+        text === "price"
             ? (arrMaxMin = getNumbers(value))
             : (arrMaxMin = getNumbers2(value));
         if (arrMaxMin.length === 1) {
             if (+arrMaxMin[0] === 1 || +arrMaxMin[0] === 20) {
                 setPersent1(0);
                 setPersent2(
-                    text === "prices" ? convert15to100(1) : convert15to100(20)
+                    text === "price" ? convert15to100(1) : convert15to100(20)
                 );
             }
             if (+arrMaxMin[0] === 15 || +arrMaxMin[0] === 90) {
@@ -46,22 +67,36 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
         }
     };
 
-    const handleSubmit = () => {
-        console.log(convert100to15(persent1));
-        console.log(convert100to15(persent2));
+    const handleBeforeSubmit = (e) => {
+        let arrMinMax =
+            persent1 <= persent2
+                ? [convert100to15(persent1), convert100to15(persent2)]
+                : [convert100to15(persent2), convert100to15(persent1)];
+        handleSubmit(
+            e,
+            {
+                [text]: `Từ ${arrMinMax[0]} - ${arrMinMax[1]} ${
+                    text === "price" ? "triệu" : "m2"
+                }`,
+                [`${text}Number`]: arrMinMax,
+            },
+            {
+                [`${text}Arr`]: [persent1, persent2],
+            }
+        );
     };
 
     const convert100to15 = (percent) => {
-        if (text === "prices") {
+        if (text === "price") {
             return (Math.ceil(Math.round(percent * 1.5) / 5) * 5) / 10;
-        } else if (text === "areas") {
+        } else if (text === "area") {
             return Math.ceil(Math.round(percent * 0.9) / 5) * 5;
         } else {
             return 0;
         }
     };
     const convert15to100 = (percent) => {
-        let target = text === "prices" ? 15 : text === "areas" ? 90 : 1;
+        let target = text === "price" ? 15 : text === "area" ? 90 : 1;
         return Math.floor((percent / target) * 100);
     };
 
@@ -77,7 +112,7 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
             .filter((item) => !item === false);
 
     useEffect(() => {
-        if (text === "prices" || text === "areas") {
+        if (text === "price" || text === "area") {
             const activeTrack = document.getElementById("track-active");
             if (persent2 <= persent1) {
                 activeTrack.style.left = `${persent2}%`;
@@ -113,8 +148,29 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
                         {title}
                     </div>
                 </div>
-                {(text === "categories" || text === "provinces") && (
+                {(text === "category" || text === "province") && (
                     <div className="px-[20px] py-[15px]">
+                        <div className="flex items-center pb-[10px] mb-[10px] border-b-[1px] border-[#ccc] cursor-pointer hover:text-bg1">
+                            <input
+                                type="radio"
+                                name={text}
+                                id={text}
+                                onClick={(e) =>
+                                    handleSubmit(e, {
+                                        [text]:
+                                            text === "category"
+                                                ? "Tất cả"
+                                                : "Toàn quốc",
+                                        [`${text}Code`]: null,
+                                    })
+                                }
+                                className="text-[#ccc] mr-[8px] mt-[2px]"
+                                defaultChecked={true}
+                            />
+                            <label className="text-primary text-[14px] cursor-pointer hover:text-bg1">
+                                {text === "category" ? "Tất cả" : "Toàn quốc"}
+                            </label>
+                        </div>
                         {content?.map((item, index) => {
                             return (
                                 <div
@@ -125,12 +181,20 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
                                         type="radio"
                                         name={text}
                                         id={text}
+                                        onClick={(e) =>
+                                            handleSubmit(e, {
+                                                [text]: item.value,
+                                                [`${text}Code`]: item.code,
+                                            })
+                                        }
+                                        defaultChecked={
+                                            item.code === queries[`${text}Code`]
+                                                ? true
+                                                : false
+                                        }
                                         className="text-[#ccc] mr-[8px] mt-[2px]"
                                     />
-                                    <label
-                                        htmlFor={text}
-                                        className="text-primary text-[14px] cursor-pointer hover:text-bg1"
-                                    >
+                                    <label className="text-primary text-[14px] cursor-pointer hover:text-bg1">
                                         {item.value}
                                     </label>
                                 </div>
@@ -138,20 +202,26 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
                         })}
                     </div>
                 )}
-                {(text === "prices" || text === "areas") && (
+                {(text === "price" || text === "area") && (
                     <>
                         <div className="px-[30px] py-[15px]">
                             <div className="flex-col items-center justify-center relative">
                                 <div className="text-[20px] font-bold text-orange-500 text-center w-full mt-[10px] mb-[100px]">
-                                    {`Từ ${
-                                        persent1 <= persent2
-                                            ? convert100to15(persent1)
-                                            : convert100to15(persent2)
-                                    } - ${
-                                        persent2 >= persent1
-                                            ? convert100to15(persent2)
-                                            : convert100to15(persent1)
-                                    } ${text === "prices" ? "triệu" : "m2"}`}
+                                    {persent1 === 100 && persent2 === 100
+                                        ? `Trên ${convert100to15(persent1)} ${
+                                              text === "price" ? "triệu+" : "m2"
+                                          }`
+                                        : `Từ ${
+                                              persent1 <= persent2
+                                                  ? convert100to15(persent1)
+                                                  : convert100to15(persent2)
+                                          } - ${
+                                              persent2 >= persent1
+                                                  ? convert100to15(persent2)
+                                                  : convert100to15(persent1)
+                                          } ${
+                                              text === "price" ? "triệu" : "m2"
+                                          }`}
                                 </div>
                                 <div
                                     onClick={(e) => {
@@ -209,7 +279,7 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
                                     }}
                                     className="cursor-pointer text-[14px] text-primary absolute right-[-18px] top-[95px] bottom-0"
                                 >
-                                    {text === "prices"
+                                    {text === "price"
                                         ? "15 triệu+"
                                         : "trên 90 m2"}
                                 </div>
@@ -241,7 +311,7 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
                             </div>
                         </div>
                         <div
-                            onClick={handleSubmit}
+                            onClick={handleBeforeSubmit}
                             className="mt-[136px] cursor-pointer hover:bg-orange-500 w-full bg-orange-400 text-center py-[10px] text-[16px] font-bold rounded-b-lg"
                         >
                             ÁP DỤNG
@@ -253,4 +323,4 @@ const ModalList = ({ content, text, title, setIsShowModal }) => {
     );
 };
 
-export default ModalList;
+export default Modal;

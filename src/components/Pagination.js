@@ -30,8 +30,8 @@ const Pagination = () => {
 
     let maxPage = Math.ceil(count / process.env.REACT_APP_LIMIT);
     useEffect(() => {
-        let end = currentPage + 1 > maxPage ? maxPage : currentPage + 1;
-        let start = currentPage - 1 <= 0 ? 1 : currentPage - 1;
+        let end = currentPage + 2 > maxPage ? maxPage : currentPage + 2;
+        let start = currentPage - 2 <= 0 ? 1 : currentPage - 2;
         let temp = [];
         for (let i = start; i <= end; i++) {
             temp.push(i);
@@ -46,9 +46,25 @@ const Pagination = () => {
             for (let entry of entries) {
                 paramSearchs.push(entry);
             }
-            let a = {};
-            paramSearchs?.map((i) => (a = { ...a, [i[0]]: i[1] }));
-            return a;
+            let searchParamObject = {};
+            paramSearchs?.forEach((i) => {
+                if (
+                    Object.keys(searchParamObject)?.some(
+                        (item) => item === i[0] && item !== "page"
+                    )
+                ) {
+                    searchParamObject[i[0]] = [
+                        ...searchParamObject[i[0]],
+                        i[1],
+                    ];
+                } else {
+                    searchParamObject = {
+                        ...searchParamObject,
+                        [i[0]]: [i[1]],
+                    };
+                }
+            });
+            return searchParamObject;
         };
         setCurrentPage(item);
         navigate({
@@ -59,7 +75,7 @@ const Pagination = () => {
 
     return (
         <div className="w-full flex items-center justify-center gap-[6px] mt-[20px]">
-            {currentPage >= 3 ? (
+            {currentPage >= 4 ? (
                 <>
                     <span
                         className="rounded-[3px] cursor-pointer hover:bg-[#d3d3d3] px-[20px] py-[10px] bg-white text-primary"
@@ -71,8 +87,17 @@ const Pagination = () => {
                         ...
                     </span>
                 </>
-            ) : (
+            ) : currentPage < 4 ? (
                 ""
+            ) : (
+                <>
+                    <span
+                        className="rounded-[3px] cursor-pointer hover:bg-[#d3d3d3] px-[20px] py-[10px] bg-white text-primary"
+                        onClick={() => handleClickChangePage(1)}
+                    >
+                        1
+                    </span>
+                </>
             )}
             {arrPage.length > 0 &&
                 arrPage.map((item) => {

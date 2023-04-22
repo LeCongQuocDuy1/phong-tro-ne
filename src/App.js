@@ -11,6 +11,10 @@ function App() {
                     <Route path={paths.STAR} element={<pages.Home />} />
                     <Route path={paths.HOME} element={<pages.Home />} />
                     <Route
+                        path={paths.SEARCH_RESULT}
+                        element={<pages.SearchResult />}
+                    />
+                    <Route
                         path={paths.DETAIL_POST__TITLE__POSTID}
                         element={<pages.DetailPost />}
                     />
