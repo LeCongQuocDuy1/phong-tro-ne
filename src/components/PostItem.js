@@ -32,7 +32,6 @@ const PostItem = ({ post }) => {
         }
         return stars;
     };
-
     return (
         <div className="">
             <div className="w-full h-[1px] bg-bg2"></div>
@@ -112,12 +111,12 @@ const PostItem = ({ post }) => {
                                 className="w-[30px] h-[30px] rounded-full mr-[6px]"
                             />
                             <div className="text-[14px] text-second">
-                                {post.user.name}
+                                {post.users.name}
                             </div>
                         </div>
                         <div className="flex items-center">
                             <div className="px-[6px] py-[3px] text-[13px] rounded-[4px] cursor-pointer text-white bg-bg1 mr-[5px]">
-                                Gọi {post.user.phone}
+                                Gọi {post.users.phone}
                             </div>
                             <div className="px-[6px] py-[3px] text-[12px] rounded-[4px] hover:bg-bg1 hover:text-white border-[1px] border-bg1 cursor-pointer text-bg1 bg-white">
                                 Nhắn Zalo

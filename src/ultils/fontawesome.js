@@ -20,8 +20,20 @@ import {
     faArrowLeft,
     faCircle,
     faCircleCheck,
+    faClipboardList,
+    faWallet,
+    faCreditCard,
+    faUserCircle,
+    faDollarSign,
 } from "@fortawesome/free-solid-svg-icons";
-// import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+    faEdit,
+    faClock,
+    faClipboard,
+    faCalendar,
+    faComment,
+    faFile,
+} from "@fortawesome/free-regular-svg-icons";
 
 export const icons = {
     faHeart,
@@ -45,4 +57,15 @@ export const icons = {
     faArrowLeft,
     faCircle,
     faCircleCheck,
+    faClipboardList,
+    faWallet,
+    faCreditCard,
+    faUserCircle,
+    faDollarSign,
+    faEdit,
+    faClock,
+    faClipboard,
+    faCalendar,
+    faComment,
+    faFile,
 };

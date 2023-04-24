@@ -13,6 +13,9 @@ const actionTypes = {
     GET_PROVINCES: "GET_PROVINCES",
     GET_POSTS_LIMIT: "GET_POSTS_LIMIT",
     GET_POSTS_LIMIT_DATE: "GET_POSTS_LIMIT_DATE",
+
+    // USER CURRENT
+    GET_CURRENT: "GET_CURRENT",
 };
 
 export default actionTypes;

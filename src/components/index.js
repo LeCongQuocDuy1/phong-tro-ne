@@ -7,3 +7,4 @@ export { default as Search } from "./Search";
 export { default as Province } from "./Province";
 export { default as Left } from "./Left";
 export { default as Right } from "./Right";
+export { default as SideBarPrivate } from "./SideBarPrivate";

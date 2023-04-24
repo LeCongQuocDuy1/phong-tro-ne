@@ -1,6 +1,8 @@
 import React from "react";
 
 const Button = ({
+    cursorPointer = "",
+    borderRadius = "",
     backgroundColor = "bg-primary",
     textColor = "text-white",
     fontSize = "text-[14px]",
@@ -15,7 +17,7 @@ const Button = ({
 }) => {
     return (
         <button
-            className={`hover:underline ${height} ${width} ${fontSize} ${fontBold} ${textColor} ${backgroundColor} ${marginBottom} ${marginRight} rounded-md`}
+            className={`hover:underline ${cursorPointer} ${borderRadius} ${height} ${width} ${fontSize} ${fontBold} ${textColor} ${backgroundColor} ${marginBottom} ${marginRight} rounded-md`}
             onClick={onClick}
         >
             {content || null}

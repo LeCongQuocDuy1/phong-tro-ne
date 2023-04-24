@@ -10,7 +10,20 @@ export const paths = {
     DETAIL_POST: "/chi-tiet/*",
     SEARCH_RESULT: "tim-kiem",
     LOGIN: "dang-nhap",
+    LOGOUT: "dang-xuat",
     STAR: "*",
+
+    // Private
+    PRIVATE: "/he-thong/*",
+    DANG_TIN_CHO_THUE: "dang-tin-cho-thue",
+    QUAN_LY_TIN_DANG: "quan-ly-tin-dang",
+    THONG_TIN_CA_NHAN: "thong-tin-ca-nhan",
+    NAP_TIEN: "nap-tien",
+    LICH_SU_NAP_TIEN: "lich-su-nap-tien",
+    LICH_SU_THANH_TOAN: "lich-su-thanh-toan",
+    BANG_GIA_DICH_VU: "bang-gia-dich-vu",
+    LIEN_HE: "lien-he",
+    TIN_DA_LUU: "tin-da-luu",
 };
 
 export const location = [

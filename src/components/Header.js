@@ -1,14 +1,16 @@
-import { React, useCallback, useEffect, useRef } from "react";
+import { React, useCallback, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../ultils/fontawesome";
 import logo from "../assets/logo-removebg-preview.png";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import * as actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { paths } from "../ultils/constants";
+import { menus } from "../ultils/menuOptions";
 import Button from "./Button";
 
-const Header = () => {
+const Header = ({ currentData }) => {
+    const [isShowDropdownMenu, setIsShowDropdownMenu] = useState(false);
     const listRef = useRef();
     const [params] = useSearchParams();
     const page = +params.get("page");
@@ -56,9 +58,9 @@ const Header = () => {
                         />
                         <div className="ml-[5px]">
                             <p className="text-[14px]">
-                                Xin chào,{" "}
                                 <span className="font-bold">
-                                    Lê Công Quốc Duy
+                                    {`Xin chào, ${currentData.name}` ||
+                                        "Phongtrone xin chào bạn!"}
                                 </span>
                             </p>
                             <p className="text-[14px]">
@@ -111,18 +113,43 @@ const Header = () => {
                 </ul>
                 {isLoggedIn && (
                     <>
-                        <Button
-                            marginRight="mr-[10px]"
-                            backgroundColor="bg-primary"
-                            width="w-[160px]"
-                            content="Quản lý tài khoản"
-                            icon={
-                                <FontAwesomeIcon
-                                    icon={icons.faHouseUser}
-                                    className="text-[16px] ml-1"
-                                />
-                            }
-                        />
+                        <div className="relative">
+                            <Button
+                                onClick={() =>
+                                    setIsShowDropdownMenu(!isShowDropdownMenu)
+                                }
+                                class="absolute"
+                                marginRight="mr-[10px]"
+                                backgroundColor="bg-primary"
+                                width="w-[160px]"
+                                content="Quản lý tài khoản"
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={icons.faHouseUser}
+                                        className="text-[16px] ml-1"
+                                    />
+                                }
+                            />
+                            {isShowDropdownMenu && (
+                                <div className="z-20 absolute top-[50px] left-[0px] w-[200px] bg-white rounded-md pt-[10px] pb-[30px] px-[15px] shadow-xl">
+                                    {menus.map((item) => (
+                                        <Link
+                                            key={item.id}
+                                            to={item.path}
+                                            className="text-bg1 hover:text-bg2 flex items-center border-b-[1px] border-[#d3d3d3] rounded-sm py-[6px] cursor-pointer"
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={item.icon}
+                                                className="text-[18px] mr-2"
+                                            />
+                                            <div className="text-[14px]">
+                                                {item.text}
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                         <Button
                             marginRight="mr-[10px]"
                             backgroundColor="bg-second"

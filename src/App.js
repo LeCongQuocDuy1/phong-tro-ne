@@ -1,8 +1,20 @@
 import { Routes, Route } from "react-router-dom";
 import * as pages from "./pages/public/";
+import * as privates from "./pages/private/";
 import { paths } from "./ultils/constants";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import * as actions from "./store/actions";
 function App() {
+    const dispatch = useDispatch();
+    const { isLoggedIn } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        setTimeout(() => {
+            isLoggedIn && dispatch(actions.getCurrents());
+        }, 2000);
+    }, [dispatch, isLoggedIn]);
+
     return (
         <div className="">
             <Routes>
@@ -41,6 +53,16 @@ function App() {
                     <Route
                         path={paths.TIM_NGUOI_O_GHEP}
                         element={<pages.Category />}
+                    />
+                </Route>
+                <Route path={paths.PRIVATE} element={<privates.Layout />}>
+                    <Route
+                        path={paths.DANG_TIN_CHO_THUE}
+                        element={<privates.CreatePost />}
+                    />
+                    <Route
+                        path={paths.QUAN_LY_TIN_DANG}
+                        element={<privates.ManagePost />}
                     />
                 </Route>
             </Routes>
