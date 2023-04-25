@@ -18,7 +18,7 @@ const Layout = () => {
                 <div className="w-[20%] h-screen bg-bg">
                     <SideBarPrivate currentData={currentData} />
                 </div>
-                <div className="w-[80%] bg-blue-300 px-[30px] py-[20px]">
+                <div className="w-[80%]">
                     <Outlet />
                 </div>
             </div>
