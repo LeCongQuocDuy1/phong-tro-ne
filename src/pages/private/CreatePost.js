@@ -1,11 +1,15 @@
 import { React, useEffect, useState } from "react";
-import { SelectAddress, InputForm2 } from "../../components";
+import { SelectAddress, InputForm2, Loading, Button } from "../../components";
 import {
     apiGetPublicDistrict,
     apiGetPublicProvinces,
 } from "../../services/app";
+import { apiUploadImages } from "../../services/post";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../store/actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icons } from "../../ultils/fontawesome";
+import { getCodesPrice, getCodesArea } from "../../ultils/getCode";
 
 const targets = [
     {
@@ -20,8 +24,10 @@ const targets = [
 
 const CreatePost = () => {
     const dispatch = useDispatch();
-    const { categories } = useSelector((state) => state.app);
+    const { categories, prices, areas } = useSelector((state) => state.app);
     const { currentData } = useSelector((state) => state.user);
+    const [isLoading, setIsLoading] = useState(false);
+    const [images, setImages] = useState([]);
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [province, setProvince] = useState("");
@@ -33,7 +39,7 @@ const CreatePost = () => {
         title: "",
         priceNumber: 0,
         areaNumber: 0,
-        image: "",
+        images: "",
         address: "",
         priceCode: "",
         areaCode: "",
@@ -101,7 +107,52 @@ const CreatePost = () => {
         dispatch(actions.getCategories());
     }, [dispatch]);
 
-    console.log(payload);
+    const handleFiles = async (e) => {
+        e.stopPropagation();
+        setIsLoading(true);
+        const files = e.target.files;
+        const formData = new FormData();
+        let images = [];
+        for (let i of files) {
+            formData.append("file", i);
+            formData.append(
+                "upload_preset",
+                process.env.REACT_APP_UPLOAD_ASSETS_NAME
+            );
+            const response = await apiUploadImages(formData);
+            if (response.status === 200)
+                images = [...images, response.data?.secure_url];
+        }
+        setIsLoading(false);
+        setImages((prev) => [...prev, ...images]);
+        setPayload((prev) => ({
+            ...prev,
+            images: [...prev.images, ...images],
+        }));
+    };
+
+    const handleDeleteImage = (image) => {
+        setImages((prev) => prev?.filter((item) => item !== image));
+        setPayload((prev) => ({
+            ...prev,
+            images: prev.images?.filter((item) => item !== image),
+        }));
+    };
+
+    const handleSubmit = () => {
+        let priceCodeArr = getCodesPrice(+payload.priceNumber, prices, 1, 15);
+        let priceCode = priceCodeArr[priceCodeArr.length - 1]?.code;
+        let areaCodeArr = getCodesArea(+payload.areaNumber, areas, 20, 90);
+        let areaCode = areaCodeArr[areaCodeArr.length - 1]?.code;
+
+        const finalePayload = {
+            ...payload,
+            priceCode,
+            areaCode,
+        };
+
+        console.log(finalePayload);
+    };
 
     return (
         <div className="px-[30px] py-[10px] bg-white w-full">
@@ -181,7 +232,7 @@ const CreatePost = () => {
                         Tiêu đề
                     </label>
                     <input
-                        value={payload.title}
+                        value={payload.title || ""}
                         onChange={(e) =>
                             setPayload((prev) => ({
                                 ...prev,
@@ -199,7 +250,7 @@ const CreatePost = () => {
                         Nội dung mô tả
                     </label>
                     <textarea
-                        value={payload.description}
+                        value={payload.description || ""}
                         onChange={(e) =>
                             setPayload((prev) => ({
                                 ...prev,
@@ -220,7 +271,7 @@ const CreatePost = () => {
                         id="contact"
                         type="text"
                         className="text-[14px] px-[10px] py-[5px] w-full rounded-[3px] outline-none border-[1px] border-[#ccc] text-primary bg-[#d3d3d39d] mb-[10px]"
-                        value={currentData?.name || currentData?.username}
+                        value={currentData?.name || currentData?.username || ""}
                         readOnly
                     />
                     <label
@@ -233,7 +284,7 @@ const CreatePost = () => {
                         id="phone"
                         type="text"
                         className="text-[14px] px-[10px] py-[5px] w-full rounded-[3px] outline-none border-[1px] border-[#ccc] text-primary bg-[#d3d3d39d] mb-[10px]"
-                        value={currentData?.phone}
+                        value={currentData?.phone || ""}
                         readOnly
                     />
                     <InputForm2
@@ -277,23 +328,74 @@ const CreatePost = () => {
                     >
                         Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn
                     </label>
-                    <div className="w-full">
+                    <div className="w-full mb-[12px]">
                         <label
                             className="flex flex-col items-center justify-center w-full h-[200px] border-dashed border-[3px] border-[#ccc]"
                             htmlFor="image"
                         >
-                            <img
-                                src="https://png.pngtree.com/png-clipart/20200225/original/pngtree-image-upload-icon-photo-upload-icon-png-image_5279794.jpg"
-                                className="w-[100px] h-[100px] object-cover"
-                                alt=""
-                            />
-                            <p>Thêm ảnh</p>
+                            {isLoading ? (
+                                <Loading />
+                            ) : (
+                                <>
+                                    <img
+                                        src="https://png.pngtree.com/png-clipart/20200225/original/pngtree-image-upload-icon-photo-upload-icon-png-image_5279794.jpg"
+                                        className="w-[100px] h-[100px] object-cover"
+                                        alt=""
+                                    />
+                                    <p>Thêm ảnh</p>
+                                </>
+                            )}
                         </label>
-                        <input type="file" id="image" />
+                        <input
+                            onChange={handleFiles}
+                            hidden
+                            type="file"
+                            id="image"
+                            multiple
+                        />
                     </div>
+                    <label className="block text-[13px] font-bold text-primary mb-[12px]">
+                        Các hình ảnh đã thêm
+                    </label>
+                    <div className="w-full flex flex-wrap items-center gap-[15px] mb-[15px]">
+                        {images.map((image, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className="w-[30%] h-[100px] relative"
+                                >
+                                    <img
+                                        src={image}
+                                        className="w-full h-full object-cover rounded-lg"
+                                        alt=""
+                                    />
+                                    <span
+                                        onClick={() => handleDeleteImage(image)}
+                                        className="absolute h-[25px] w-[25px] text-center rounded-full bg-[#d3d3d3] hover:bg-[#ccc] top-[8px] right-[8px] cursor-pointer"
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={icons.faTrash}
+                                            className="text-[12px] text-gray-500"
+                                        />
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <Button
+                        width="w-full"
+                        fontBold="font-bold"
+                        fontSize="text-[20px]"
+                        onClick={handleSubmit}
+                        content="Tạo mới"
+                        backgroundColor="bg-green-600"
+                        textColor="text-white"
+                    />
                 </div>
                 <div className="w-[40%]">
-                    <div className="w-full h-[200px] bg-red-400"></div>
+                    <div className="w-full h-[200px]">
+                        <Loading />
+                    </div>
                     <div className="w-full text-yellow-500 bg-orange-100 p-[15px] mt-[15px]">
                         <div className="text-[18px] font-bold mb-[10px]">
                             Lưu ý khi đăng tin

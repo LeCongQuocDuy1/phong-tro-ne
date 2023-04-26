@@ -15,6 +15,12 @@ function App() {
         }, 2000);
     }, [dispatch, isLoggedIn]);
 
+    useEffect(() => {
+        dispatch(actions.getCategories());
+        dispatch(actions.getPrices());
+        dispatch(actions.getAreas());
+    }, [dispatch]);
+
     return (
         <div className="">
             <Routes>

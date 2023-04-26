@@ -1,4 +1,5 @@
 import axiosConfig from "../axiosConfig";
+import axios from "axios";
 
 export const apiGetAllPosts = () =>
     new Promise(async (resolve, reject) => {
@@ -29,12 +30,27 @@ export const apiGetAllPostsLimit = (query) =>
         }
     });
 
-    export const apiGetAllPostsLimitDate = () =>
+export const apiGetAllPostsLimitDate = () =>
     new Promise(async (resolve, reject) => {
         try {
             const response = await axiosConfig({
                 method: "GET",
                 url: `/api/v1/post/new-post`,
+            });
+
+            resolve(response);
+        } catch (error) {
+            reject(error);
+        }
+    });
+
+export const apiUploadImages = (images) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios({
+                method: "POST",
+                url: `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
+                data: images,
             });
 
             resolve(response);

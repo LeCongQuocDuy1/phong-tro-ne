@@ -25,6 +25,7 @@ import {
     faCreditCard,
     faUserCircle,
     faDollarSign,
+    faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faEdit,
@@ -68,4 +69,5 @@ export const icons = {
     faCalendar,
     faComment,
     faFile,
+    faTrash,
 };

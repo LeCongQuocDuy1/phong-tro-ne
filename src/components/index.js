@@ -10,3 +10,4 @@ export { default as Right } from "./Right";
 export { default as SideBarPrivate } from "./SideBarPrivate";
 export { default as SelectAddress } from "./SelectAddress";
 export { default as InputForm2 } from "./InputForm2";
+export { default as Loading } from "./Loading";

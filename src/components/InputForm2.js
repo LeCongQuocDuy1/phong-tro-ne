@@ -11,7 +11,7 @@ const InputForm2 = ({ label, unit, small, onChange, value }) => {
             </label>
             <div className="relative">
                 <input
-                    value={value}
+                    value={value || ""}
                     onChange={onChange}
                     id={`${unit}`}
                     type="text"
