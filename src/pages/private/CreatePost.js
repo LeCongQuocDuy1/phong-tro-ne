@@ -4,12 +4,14 @@ import {
     apiGetPublicDistrict,
     apiGetPublicProvinces,
 } from "../../services/app";
-import { apiUploadImages } from "../../services/post";
+import { apiUploadImages, apiCreatePost } from "../../services/post";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../store/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../ultils/fontawesome";
 import { getCodesPrice, getCodesArea } from "../../ultils/getCode";
+import Swal from "sweetalert2";
+import validate from "../../ultils/validate";
 
 const targets = [
     {
@@ -20,12 +22,17 @@ const targets = [
         code: "Nữ",
         value: "Nữ",
     },
+    {
+        code: "Tất cả",
+        value: "Tất cả",
+    },
 ];
 
 const CreatePost = () => {
     const dispatch = useDispatch();
     const { categories, prices, areas } = useSelector((state) => state.app);
     const { currentData } = useSelector((state) => state.user);
+    const [invalidFields, setInvalidFields] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [images, setImages] = useState([]);
     const [provinces, setProvinces] = useState([]);
@@ -45,7 +52,7 @@ const CreatePost = () => {
         areaCode: "",
         description: "",
         target: "",
-        province: "",
+        provinceCode: "",
     });
 
     useEffect(() => {
@@ -92,7 +99,7 @@ const CreatePost = () => {
                       }`
                     : ""
             }`,
-            province: province
+            provinceCode: province
                 ? `${
                       provinces.find((item) => item.province_id === province)
                           .province_name
@@ -139,19 +146,62 @@ const CreatePost = () => {
         }));
     };
 
-    const handleSubmit = () => {
-        let priceCodeArr = getCodesPrice(+payload.priceNumber, prices, 1, 15);
-        let priceCode = priceCodeArr[priceCodeArr.length - 1]?.code;
+    const handleSubmit = async () => {
+        let priceCodeArr = getCodesPrice(
+            +payload.priceNumber / Math.pow(10, 6),
+            prices,
+            1,
+            15
+        );
         let areaCodeArr = getCodesArea(+payload.areaNumber, areas, 20, 90);
-        let areaCode = areaCodeArr[areaCodeArr.length - 1]?.code;
+        let priceCode = priceCodeArr[0]?.code;
+        let areaCode = areaCodeArr[0]?.code;
 
         const finalePayload = {
             ...payload,
             priceCode,
             areaCode,
+            userId: currentData?.id,
+            priceNumber: +payload.priceNumber / Math.pow(10, 6),
+            areaNumber: +payload.areaNumber,
+            categoryCode: `${
+                categories?.find((item) => item.code === payload?.categoryCode)
+                    ?.value
+            } ${payload?.address.split(",")[0]}`,
+            target: payload.target || "Tất cả",
         };
 
-        console.log(finalePayload);
+        const result = validate(finalePayload, setInvalidFields);
+        if (result === 0) {
+            const response = await apiCreatePost(finalePayload);
+            if (response?.data.err === 0) {
+                Swal.fire(
+                    "Thành công",
+                    "Đã thêm bài đăng mới!",
+                    "success"
+                ).then(() => {
+                    setPayload({
+                        categoryCode: "",
+                        title: "",
+                        priceNumber: 0,
+                        areaNumber: 0,
+                        images: "",
+                        address: "",
+                        priceCode: "",
+                        areaCode: "",
+                        description: "",
+                        target: "",
+                        provinceCode: "",
+                    });
+                });
+            } else {
+                Swal.fire(
+                    "Ui!",
+                    "Có lỗi gì đó khi thêm bài đăng mới!",
+                    "error"
+                );
+            }
+        }
     };
 
     return (
@@ -166,6 +216,9 @@ const CreatePost = () => {
                     </div>
                     <div className="w-full mb-[15px] flex items-center justify-between gap-[20px]">
                         <SelectAddress
+                            name="provinceCode"
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
                             value={province}
                             setValue={setProvince}
                             options={provinces}
@@ -174,6 +227,8 @@ const CreatePost = () => {
                             type="province"
                         />
                         <SelectAddress
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
                             value={district}
                             setValue={setDistrict}
                             label="Quận/huyện"
@@ -218,6 +273,9 @@ const CreatePost = () => {
                     </div>
                     <div className="w-[50%] mb-[20px]">
                         <SelectAddress
+                            name="categoryCode"
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
                             value={category}
                             setValue={setCategory}
                             options={categories}
@@ -239,10 +297,16 @@ const CreatePost = () => {
                                 title: e.target.value,
                             }))
                         }
+                        onFocus={() => setInvalidFields([])}
                         id="title"
                         type="text"
-                        className="text-[14px] px-[10px] py-[5px] w-full rounded-[3px] outline-none border-[1px] border-[#ccc] text-primary mb-[10px]"
+                        className="text-[14px] px-[10px] py-[5px] w-full rounded-[3px] outline-none border-[1px] border-[#ccc] text-primary"
                     />
+                    <p className="text-[12px] text-red-500 mt-[5px] mb-[10px]">
+                        {invalidFields?.some((item) => item.name === "title") &&
+                            invalidFields?.find((item) => item.name === "title")
+                                .message}
+                    </p>
                     <label
                         htmlFor="description"
                         className="text-[13px] font-bold text-primary mb-[12px]"
@@ -257,10 +321,19 @@ const CreatePost = () => {
                                 description: e.target.value,
                             }))
                         }
+                        onFocus={() => setInvalidFields([])}
                         id="description"
                         rows="10"
-                        className="text-[14px] px-[10px] py-[5px] w-full rounded-[3px] outline-none border-[1px] border-[#ccc] text-primary mb-[10px]"
+                        className="text-[14px] px-[10px] py-[5px] w-full rounded-[3px] outline-none border-[1px] border-[#ccc] text-primary"
                     ></textarea>
+                    <p className="text-[12px] text-red-500 mb-[10px]">
+                        {invalidFields?.some(
+                            (item) => item.name === "description"
+                        ) &&
+                            invalidFields?.find(
+                                (item) => item.name === "description"
+                            ).message}
+                    </p>
                     <label
                         htmlFor="contact"
                         className="text-[13px] font-bold text-primary mb-[12px]"
@@ -288,6 +361,9 @@ const CreatePost = () => {
                         readOnly
                     />
                     <InputForm2
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
+                        type={typeof payload.priceNumber}
                         value={payload.priceNumber}
                         onChange={(e) =>
                             setPayload((prev) => ({
@@ -298,8 +374,12 @@ const CreatePost = () => {
                         small="Hãy nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000"
                         label="Giá cho thuê"
                         unit="đồng"
+                        name="priceNumber"
                     />
                     <InputForm2
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
+                        type={typeof payload.areaNumber}
                         value={payload.areaNumber}
                         onChange={(e) =>
                             setPayload((prev) => ({
@@ -309,9 +389,13 @@ const CreatePost = () => {
                         }
                         label="Diện tích"
                         unit="m2"
+                        name="areaNumber"
                     />
                     <div className="w-[50%] mb-[20px]">
                         <SelectAddress
+                            name="target"
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
                             value={target}
                             setValue={setTarget}
                             options={targets}
@@ -353,6 +437,14 @@ const CreatePost = () => {
                             id="image"
                             multiple
                         />
+                        <span className="text-[12px] text-red-500 my-[12px]">
+                            {invalidFields?.some(
+                                (item) => item.name === "images"
+                            ) &&
+                                invalidFields?.find(
+                                    (item) => item.name === "images"
+                                ).message}
+                        </span>
                     </div>
                     <label className="block text-[13px] font-bold text-primary mb-[12px]">
                         Các hình ảnh đã thêm

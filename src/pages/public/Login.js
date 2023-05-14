@@ -4,6 +4,7 @@ import { InputForm, Button } from "../../components";
 import * as actions from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import validate from "../../ultils/validate";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -20,65 +21,19 @@ const Login = () => {
 
     const hanldeSubmit = async () => {
         let finalPayload = isRegister
-            ? validate(payload)
-            : validate({
-                  phone: payload.phone,
-                  password: payload.password,
-              });
+            ? validate(payload, setInvalidFields)
+            : validate(
+                  {
+                      phone: payload.phone,
+                      password: payload.password,
+                  },
+                  setInvalidFields
+              );
         if (finalPayload === 0) {
             isRegister
                 ? dispatch(actions.register(payload))
                 : dispatch(actions.login(payload));
         }
-    };
-
-    const validate = (payload) => {
-        let invalids = 0;
-        let fields = Object.entries(payload);
-        fields.forEach((items, index) => {
-            if (items[1] === "") {
-                setInvalidFields((prev) => [
-                    ...prev,
-                    {
-                        name: items[0],
-                        message: "Bạn không được bỏ trống trường này ! :<",
-                    },
-                ]);
-                invalids++;
-            }
-        });
-        fields.forEach((items, index) => {
-            switch (items[0]) {
-                case "password":
-                    if (items[1].length < 6) {
-                        setInvalidFields((prev) => [
-                            ...prev,
-                            {
-                                name: items[0],
-                                message:
-                                    "Mật khẩu phải có tối thiểu 6 kí tự ! :<",
-                            },
-                        ]);
-                        invalids++;
-                    }
-                    break;
-                case "phone":
-                    if (!+items[1]) {
-                        setInvalidFields((prev) => [
-                            ...prev,
-                            {
-                                name: items[0],
-                                message: "Số điện thoại không hợp lệ ! :<",
-                            },
-                        ]);
-                        invalids++;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        });
-        return invalids;
     };
 
     useEffect(() => {

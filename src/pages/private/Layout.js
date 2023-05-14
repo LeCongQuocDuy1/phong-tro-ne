@@ -15,7 +15,7 @@ const Layout = () => {
         <div>
             <Nav />
             <div className="flex items-start w-full">
-                <div className="w-[20%] h-screen bg-bg">
+                <div className="w-[20%] relative">
                     <SideBarPrivate currentData={currentData} />
                 </div>
                 <div className="w-[80%]">

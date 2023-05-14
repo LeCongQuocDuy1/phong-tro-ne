@@ -11,7 +11,7 @@ const User = ({ currentData }) => {
     const dispatch = useDispatch();
 
     return (
-        <div className="">
+        <div className="h-screen w-[20%] bg-bg pb-[40px] fixed top-[40px] left-[0] z-20">
             <div className="p-[20px]">
                 <div className="flex items-center mb-[5px]">
                     <img

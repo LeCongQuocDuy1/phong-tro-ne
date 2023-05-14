@@ -1,6 +1,28 @@
 import { React } from "react";
 
-const SelectAddress = ({ label, width, options, value, setValue, type }) => {
+const SelectAddress = ({
+    name,
+    label,
+    width,
+    options,
+    value,
+    setValue,
+    type,
+    invalidFields,
+    setInvalidFields,
+}) => {
+    const handleErrorMessage = () => {
+        let nameInvalid = invalidFields?.find((item) => item.name === name);
+        let addressInvalid = invalidFields?.find(
+            (item) => item.name === "address"
+        );
+
+        return (
+            `${nameInvalid ? nameInvalid.message : ""}` ||
+            `${addressInvalid ? addressInvalid.message : ""}`
+        );
+    };
+
     return (
         <div className={`${width}`}>
             <label
@@ -14,6 +36,7 @@ const SelectAddress = ({ label, width, options, value, setValue, type }) => {
                 onChange={(e) => setValue(e.target.value)}
                 id="select-address"
                 className="cursor-pointer w-full text-[13px] border-[1px] border-[#d3d3d3] px-[5px] py-[4px] rounded-[3px]"
+                onFocus={() => setInvalidFields([])}
             >
                 <option value="">{`--- Chọn ${label} ---`}</option>
                 {type === "province"
@@ -48,6 +71,9 @@ const SelectAddress = ({ label, width, options, value, setValue, type }) => {
                       ))
                     : ""}
             </select>
+            <span className="text-[12px] text-red-500 mt-[12px]">
+                {handleErrorMessage()}
+            </span>
         </div>
     );
 };
