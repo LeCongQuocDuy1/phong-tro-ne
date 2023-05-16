@@ -1,4 +1,6 @@
 export const paths = {
+
+	// Public
     LAYOUT: "/",
     HOME: "",
     CHO_THUE_PHONG_TRO: "/cho-thue-phong-tro",

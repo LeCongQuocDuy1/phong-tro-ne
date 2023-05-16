@@ -2,6 +2,7 @@ import actionTypes from "../actions/actionTypes";
 
 const initState = {
     posts: [],
+    postOfCurrent: [],
     newPosts: [],
     msg: "",
     count: 0,
@@ -23,7 +24,12 @@ const postReducer = (state = initState, action) => {
                 newPosts: action.newPosts || [],
                 msg: action.msg || "",
             };
-
+        case actionTypes.GET_POSTS_LIMIT_ADMIN:
+            return {
+                ...state,
+                postOfCurrent: action.posts || [],
+                msg: action.msg || "",
+            };
         default:
             return state;
     }
